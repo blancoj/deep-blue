@@ -4,6 +4,25 @@ require_relative '../append_content_service'
 
 namespace :deepblue do
 
+  #Pass in a file with a list of all the works that need laoding
+  desc "Populate app with users,collections,works,files."
+  task :populateall, [:path_to_config] => :environment do |t, args|
+    #byebug
+    ENV["RAILS_ENV"] ||= "development"
+
+    #args.one? ? config_setup("/Users/blancoj/work/archive/1/data.yml") : demo_setup
+    file_path = args[:path_to_config]
+    f = File.open("/Users/blancoj/work/archive/list", "r")
+    f.each_line do |line|
+      puts line
+      line.gsub!( /\n/, "" )
+      config_setup(line)
+      puts "Done with this item."  
+    end
+    f.close
+    puts "Done."
+  end
+
   desc "Populate app with users,collections,works,files."
   task :populate, [:path_to_config] => :environment do |t, args|
     ENV["RAILS_ENV"] ||= "development"
